@@ -213,6 +213,35 @@
   </div>
 </div>
 
+<!-- MODAL EDITAR PAGAMENTO -->
+<div class="modal-overlay" id="modal-pagamento">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Editar pagamento</span><button class="modal-close" onclick="closeModal('modal-pagamento')">×</button></div>
+    <input type="hidden" id="edit-pgto-id">
+    <div style="background:var(--bg);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:14px;font-size:12px;color:var(--text-muted)" id="edit-pgto-info"></div>
+    <div class="form-row">
+      <div class="form-group"><label>Valor (R$)</label><input type="number" id="edit-pgto-valor" min="0" step="0.01" placeholder="0,00"></div>
+      <div class="form-group"><label>Data de vencimento</label><input type="date" id="edit-pgto-venc"></div>
+    </div>
+    <label>Forma de pagamento</label>
+    <select id="edit-pgto-forma"><option value="pix">PIX</option><option value="cartao">Cartão recorrente</option></select>
+    <label>Status</label>
+    <select id="edit-pgto-status">
+      <option value="pendente">Pendente</option>
+      <option value="pago">Pago</option>
+    </select>
+    <label>Observação (opcional)</label>
+    <input id="edit-pgto-obs" placeholder="Ex: pago com desconto, estornado...">
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn-sm btn-del" onclick="delPgto()">Excluir cobrança</button>
+      <div style="display:flex;gap:8px">
+        <button class="btn-primary" onclick="savePgto()">Salvar</button>
+        <button class="btn-sm" onclick="closeModal('modal-pagamento')">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="app">
   <div class="sidebar">
     <div class="sb-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
@@ -769,8 +798,60 @@ function renderPgtos(){
   el.innerHTML=[...S.pagamentos].sort((a,b)=>new Date(b.vencimento)-new Date(a.vencimento)).map(p=>{
     const vd=new Date(p.vencimento+'T00:00:00');const atrasado=p.status==='pendente'&&vd<td;
     const badge=p.status==='pago'?'<span class="badge bg">Pago</span>':atrasado?'<span class="badge br">Atrasado</span>':'<span class="badge ba">Pendente</span>';
-    return`<div class="row"><div><div class="row-name">${p.tutor_nome||p.plano_nome}</div><div class="row-sub">${p.plano_nome} · R$ ${parseFloat(p.valor).toFixed(2)} · ${p.forma==='pix'?'PIX':'Cartão'} · ${vd.toLocaleDateString('pt-BR')}</div></div><div style="display:flex;gap:6px;align-items:center">${badge}${p.status!=='pago'?`<button class="btn-sm btn-confirm" onclick="marcarPago(${p.id})">✓ Pago</button>`:''}</div></div>`;
+    const obs=p.observacao?`<span style="color:var(--text-hint);font-style:italic"> · ${p.observacao}</span>`:'';
+    return`<div class="row">
+      <div>
+        <div class="row-name">${p.tutor_nome||p.plano_nome}</div>
+        <div class="row-sub">${p.plano_nome} · R$ ${parseFloat(p.valor).toFixed(2)} · ${p.forma==='pix'?'PIX':'Cartão'} · ${vd.toLocaleDateString('pt-BR')}${obs}</div>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center">
+        ${badge}
+        ${p.status!=='pago'?`<button class="btn-sm btn-confirm" onclick="marcarPago(${p.id})">✓ Pago</button>`:''}
+        <button class="btn-sm btn-edit" onclick="editPgto(${p.id})">Editar</button>
+      </div>
+    </div>`;
   }).join('');
+}
+
+function editPgto(id){
+  const p=S.pagamentos.find(x=>x.id===id);if(!p)return;
+  document.getElementById('edit-pgto-id').value=p.id;
+  document.getElementById('edit-pgto-valor').value=parseFloat(p.valor).toFixed(2);
+  document.getElementById('edit-pgto-venc').value=p.vencimento;
+  document.getElementById('edit-pgto-forma').value=p.forma||'pix';
+  document.getElementById('edit-pgto-status').value=p.status||'pendente';
+  document.getElementById('edit-pgto-obs').value=p.observacao||'';
+  document.getElementById('edit-pgto-info').textContent=`${p.tutor_nome||'—'} · ${p.plano_nome||'—'} · ${p.mes_referencia||'avulso'}`;
+  openModal('modal-pagamento');
+}
+
+async function savePgto(){
+  const id=parseInt(document.getElementById('edit-pgto-id').value);
+  const updates={
+    valor:parseFloat(document.getElementById('edit-pgto-valor').value),
+    vencimento:document.getElementById('edit-pgto-venc').value,
+    forma:document.getElementById('edit-pgto-forma').value,
+    status:document.getElementById('edit-pgto-status').value,
+    observacao:document.getElementById('edit-pgto-obs').value.trim()||null
+  };
+  if(!updates.valor||!updates.vencimento)return;
+  setSyncPill('saving');
+  const{error}=await db.from('pagamentos').update(updates).eq('id',id);
+  if(!error){
+    const p=S.pagamentos.find(x=>x.id===id);Object.assign(p,updates);
+    setSyncPill('ok');renderPgtos();renderPainel();closeModal('modal-pagamento');
+  }else setSyncPill('error');
+}
+
+async function delPgto(){
+  const id=parseInt(document.getElementById('edit-pgto-id').value);
+  if(!confirm('Excluir esta cobrança permanentemente?'))return;
+  setSyncPill('saving');
+  const{error}=await db.from('pagamentos').delete().eq('id',id);
+  if(!error){
+    S.pagamentos=S.pagamentos.filter(x=>x.id!==id);
+    setSyncPill('ok');renderPgtos();renderPainel();closeModal('modal-pagamento');
+  }else setSyncPill('error');
 }
 
 function renderPainel(){
