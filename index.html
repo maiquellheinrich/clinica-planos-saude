@@ -769,9 +769,11 @@ async function gerarCobranças(){
   if(!contratos.length){alert('Nenhum contrato com dia de vencimento cadastrado.');return;}
   const jaGeradosIds=new Set(S.pagamentos.filter(p=>p.mes_referencia===mes).map(p=>p.contrato_id));
   const paraGerar=contratos.filter(c=>!jaGeradosIds.has(c.id));
-  if(!paraGerar.length){alert('Cobranças deste mês já foram geradas para todos os contratos.');return;}
-  if(!confirm(`Gerar ${paraGerar.length} cobrança${paraGerar.length!==1?'s':''} para ${mesAtualLabel()}?`))return;
-  setSyncPill('saving');
+  if(!paraGerar.length){alert('Todos os contratos ativos já têm cobrança gerada para '+mesAtualLabel()+'.');return;}
+  const nomes=paraGerar.map(c=>c.tutor_nome||c.plano_nome).join(', ');
+  if(!confirm(`Gerar ${paraGerar.length} cobrança${paraGerar.length!==1?'s':''} para ${mesAtualLabel()}?
+
+${nomes}`))return;
   const ano=new Date().getFullYear();const m=new Date().getMonth()+1;
   const inserts=paraGerar.map(c=>{
     const dia=Math.min(c.dia_vencimento,28);
@@ -868,15 +870,22 @@ function renderPainel(){
   const cobMes=S.pagamentos.filter(p=>p.mes_referencia===mes);
   const contratosComDia=contratosAtivos.filter(c=>c.dia_vencimento);
   const cobMesContratoIds=new Set(cobMes.map(p=>p.contrato_id));
-  const todosGerados=contratosComDia.length>0&&contratosComDia.every(c=>cobMesContratoIds.has(c.id));
-
-  document.getElementById('banner-cobranca').style.display=(!todosGerados&&contratosComDia.length>0)?'flex':'none';
-  document.getElementById('banner-ja-gerado').style.display=(todosGerados&&contratosComDia.length>0)?'flex':'none';
-  document.getElementById('banner-mes').textContent=mesAtualLabel();
-  document.getElementById('banner-mes2').textContent=mesAtualLabel();
+  const semCobranca=contratosComDia.filter(c=>!cobMesContratoIds.has(c.id));
+  const todosGerados=semCobranca.length===0&&contratosComDia.length>0;
   const pendMes=cobMes.filter(p=>p.status==='pendente').length;
   const pagosMes=cobMes.filter(p=>p.status==='pago').length;
-  document.getElementById('banner-count').textContent=`${pagosMes} pago${pagosMes!==1?'s':''}, ${pendMes} pendente${pendMes!==1?'s':''}.`;
+
+  document.getElementById('banner-cobranca').style.display=(semCobranca.length>0)?'flex':'none';
+  if(semCobranca.length>0){
+    const txt=semCobranca.length===contratosComDia.length
+      ?'Cobranças de '+mesAtualLabel()+' ainda não foram geradas.'
+      :semCobranca.length+' contrato'+(semCobranca.length!==1?'s':'')+ ' novo'+(semCobranca.length!==1?'s':'')+' sem cobrança em '+mesAtualLabel()+'.';
+    document.getElementById('banner-cobranca').querySelector('.banner-text').textContent=txt;
+  }
+  document.getElementById('banner-ja-gerado').style.display=todosGerados?'flex':'none';
+  document.getElementById('banner-mes').textContent=mesAtualLabel();
+  document.getElementById('banner-mes2').textContent=mesAtualLabel();
+  document.getElementById('banner-count').textContent=pagosMes+' pago'+(pagosMes!==1?'s':'')+', '+pendMes+' pendente'+(pendMes!==1?'s':'')+' .';
 
   document.getElementById('metrics-row').innerHTML=`
     <div class="metric"><div class="metric-lbl">Contratos ativos</div><div class="metric-val">${contratosAtivos.length}</div><div class="metric-sub">${S.tutores.length} tutores · ${S.animais.length} pets</div></div>
