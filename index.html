@@ -285,7 +285,7 @@
       <!-- PAINEL -->
       <div class="section active" id="sec-painel">
         <div id="banner-cobranca" style="display:none" class="banner">
-          <div class="banner-text">Cobranças de <strong id="banner-mes"></strong> ainda não foram geradas.</div>
+          <div class="banner-text" id="banner-cobranca-text">Cobranças de ainda não foram geradas.</div>
           <button class="btn-gerar" onclick="gerarCobranças()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
             Gerar cobranças do mês
@@ -880,10 +880,9 @@ function renderPainel(){
     const txt=semCobranca.length===contratosComDia.length
       ?'Cobranças de '+mesAtualLabel()+' ainda não foram geradas.'
       :semCobranca.length+' contrato'+(semCobranca.length!==1?'s':'')+ ' novo'+(semCobranca.length!==1?'s':'')+' sem cobrança em '+mesAtualLabel()+'.';
-    document.getElementById('banner-cobranca').querySelector('.banner-text').textContent=txt;
+    document.getElementById('banner-cobranca-text').textContent=txt;
   }
   document.getElementById('banner-ja-gerado').style.display=todosGerados?'flex':'none';
-  document.getElementById('banner-mes').textContent=mesAtualLabel();
   document.getElementById('banner-mes2').textContent=mesAtualLabel();
   document.getElementById('banner-count').textContent=pagosMes+' pago'+(pagosMes!==1?'s':'')+', '+pendMes+' pendente'+(pendMes!==1?'s':'')+' .';
 
