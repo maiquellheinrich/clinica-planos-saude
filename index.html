@@ -10,281 +10,79 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green-dark: #0F6E56;
-    --green-mid: #1D9E75;
-    --green-light: #E1F5EE;
-    --green-text: #085041;
-    --amber: #EF9F27;
-    --amber-light: #FAEEDA;
-    --amber-text: #633806;
-    --red: #E24B4A;
-    --red-light: #FCEBEB;
-    --red-text: #791F1F;
-    --blue-light: #E6F1FB;
-    --blue-text: #0C447C;
-    --bg: #f0f2f0;
-    --surface: #ffffff;
-    --border: #e4e7e4;
-    --text: #1a1f1a;
-    --text-muted: #6b736b;
-    --text-hint: #9ba39b;
-    --radius: 12px;
-    --radius-sm: 8px;
+    --green-dark: #0F6E56; --green-mid: #1D9E75; --green-light: #E1F5EE; --green-text: #085041;
+    --amber: #EF9F27; --amber-light: #FAEEDA; --amber-text: #633806;
+    --red: #E24B4A; --red-light: #FCEBEB; --red-text: #791F1F;
+    --blue-light: #E6F1FB; --blue-text: #0C447C;
+    --bg: #f0f2f0; --surface: #ffffff; --border: #e4e7e4;
+    --text: #1a1f1a; --text-muted: #6b736b; --text-hint: #9ba39b;
+    --radius: 12px; --radius-sm: 8px;
   }
-
   * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    font-size: 13px;
-    min-height: 100vh;
-  }
-
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); font-size: 13px; min-height: 100vh; }
   .app { display: flex; min-height: 100vh; }
-
-  /* SIDEBAR */
-  .sidebar {
-    width: 56px;
-    background: var(--green-dark);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 16px 0;
-    gap: 4px;
-    position: fixed;
-    top: 0; left: 0; bottom: 0;
-    z-index: 100;
-  }
-
-  .sb-logo {
-    width: 32px; height: 32px;
-    background: rgba(255,255,255,0.15);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 12px;
-  }
-
+  .sidebar { width: 56px; background: var(--green-dark); display: flex; flex-direction: column; align-items: center; padding: 16px 0; gap: 4px; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+  .sb-logo { width: 32px; height: 32px; background: rgba(255,255,255,0.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
   .sb-logo svg { width: 18px; height: 18px; color: #fff; }
-
-  .sb-ico {
-    width: 38px; height: 38px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    color: rgba(255,255,255,0.45);
-    transition: background 0.15s, color 0.15s;
-    position: relative;
-  }
-
+  .sb-ico { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: rgba(255,255,255,0.45); transition: background 0.15s, color 0.15s; position: relative; }
   .sb-ico:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
   .sb-ico.active { background: rgba(255,255,255,0.18); color: #fff; }
   .sb-ico svg { width: 18px; height: 18px; }
-
-  .sb-tooltip {
-    position: absolute;
-    left: 48px;
-    background: #1a1f1a;
-    color: #fff;
-    font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 6px;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s;
-  }
+  .sb-tooltip { position: absolute; left: 48px; background: #1a1f1a; color: #fff; font-size: 11px; padding: 4px 8px; border-radius: 6px; white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.15s; z-index: 200; }
   .sb-ico:hover .sb-tooltip { opacity: 1; }
-
-  /* MAIN */
-  .main {
-    margin-left: 56px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-  }
-
-  /* TOPBAR */
-  .topbar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    height: 52px;
-    gap: 4px;
-    position: sticky;
-    top: 0;
-    z-index: 50;
-  }
-
-  .tab {
-    padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 12px;
-    cursor: pointer;
-    color: var(--text-muted);
-    border: none;
-    background: none;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 400;
-    transition: background 0.15s, color 0.15s;
-  }
+  .main { margin-left: 56px; flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+  .topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; display: flex; align-items: center; height: 52px; gap: 4px; position: sticky; top: 0; z-index: 50; }
+  .tab { padding: 6px 14px; border-radius: 20px; font-size: 12px; cursor: pointer; color: var(--text-muted); border: none; background: none; font-family: 'DM Sans', sans-serif; transition: background 0.15s, color 0.15s; }
   .tab:hover { background: var(--bg); color: var(--text); }
   .tab.active { background: var(--green-dark); color: #fff; font-weight: 500; }
-
-  .topbar-right {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
-  .sync-pill {
-    font-size: 11px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    background: var(--green-light);
-    color: var(--green-text);
-    font-weight: 500;
-    transition: background 0.2s, color 0.2s;
-  }
+  .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+  .sync-pill { font-size: 11px; padding: 3px 10px; border-radius: 20px; background: var(--green-light); color: var(--green-text); font-weight: 500; }
   .sync-pill.saving { background: var(--amber-light); color: var(--amber-text); }
   .sync-pill.error { background: var(--red-light); color: var(--red-text); }
-
   .date-label { font-size: 11px; color: var(--text-hint); font-family: 'DM Mono', monospace; }
-
-  /* CONTENT */
   .content { padding: 20px; flex: 1; }
-  .section { display: none; }
-  .section.active { display: block; }
-
-  /* METRICS */
-  .metrics {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 12px;
-    margin-bottom: 16px;
-  }
-
-  .metric {
-    background: var(--surface);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-    border: 1px solid var(--border);
-  }
+  .section { display: none; } .section.active { display: block; }
+  .metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin-bottom: 16px; }
+  .metric { background: var(--surface); border-radius: var(--radius); padding: 14px 16px; border: 1px solid var(--border); }
   .metric-lbl { font-size: 11px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
   .metric-val { font-size: 22px; font-weight: 500; color: var(--text); line-height: 1; }
-  .metric-val.green { color: var(--green-mid); }
-  .metric-val.red { color: var(--red); }
-  .metric-val.amber { color: #BA7517; }
+  .metric-val.green { color: var(--green-mid); } .metric-val.red { color: var(--red); } .metric-val.amber { color: #BA7517; }
   .metric-sub { font-size: 11px; color: var(--text-hint); margin-top: 4px; }
-
-  /* GRIDS */
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
   .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-
-  /* CARDS */
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 14px 16px;
-  }
-
-  .card-dark {
-    background: var(--green-dark);
-    border-radius: var(--radius);
-    padding: 14px 16px;
-  }
-
+  .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); padding: 14px 16px; }
+  .card-dark { background: var(--green-dark); border-radius: var(--radius); padding: 14px 16px; }
   .card-title { font-size: 12px; font-weight: 500; color: var(--text-muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
   .card-title-light { font-size: 11px; font-weight: 500; color: rgba(255,255,255,0.55); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.04em; }
-
-  /* BADGES */
   .badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-  .bg { background: #EAF3DE; color: #27500A; }
-  .ba { background: #FAEEDA; color: #633806; }
-  .br { background: #FCEBEB; color: #791F1F; }
-  .bb { background: #E6F1FB; color: #0C447C; }
-
-  /* LIST ROWS */
+  .bg { background: #EAF3DE; color: #27500A; } .ba { background: #FAEEDA; color: #633806; }
+  .br { background: #FCEBEB; color: #791F1F; } .bb { background: #E6F1FB; color: #0C447C; }
   .row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
   .row:last-child { border-bottom: none; }
   .row-name { font-weight: 500; color: var(--text); font-size: 13px; }
   .row-sub { font-size: 11px; color: var(--text-hint); margin-top: 2px; }
-
-  /* BUTTONS */
-  .btn-sm {
-    padding: 4px 10px; font-size: 11px; border-radius: 6px;
-    border: 1px solid var(--border); background: var(--surface);
-    cursor: pointer; color: var(--text-muted);
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.15s;
-  }
+  .btn-sm { padding: 4px 10px; font-size: 11px; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); cursor: pointer; color: var(--text-muted); font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
   .btn-sm:hover { background: var(--bg); }
   .btn-confirm { border-color: var(--green-mid); background: var(--green-mid); color: #fff; }
   .btn-confirm:hover { background: var(--green-dark); border-color: var(--green-dark); }
-  .btn-del { border-color: #fcc; color: var(--red); }
-  .btn-del:hover { background: var(--red-light); }
-
-  .btn-primary {
-    padding: 8px 20px; background: var(--green-dark); color: #fff;
-    border: none; border-radius: var(--radius-sm); font-size: 13px;
-    font-weight: 500; cursor: pointer; margin-top: 6px;
-    font-family: 'DM Sans', sans-serif;
-    transition: background 0.15s;
-  }
+  .btn-del { border-color: #fcc; color: var(--red); } .btn-del:hover { background: var(--red-light); }
+  .btn-primary { padding: 8px 20px; background: var(--green-dark); color: #fff; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; margin-top: 6px; font-family: 'DM Sans', sans-serif; transition: background 0.15s; }
   .btn-primary:hover { background: var(--green-mid); }
-
-  /* FORM */
   label { font-size: 11px; color: var(--text-muted); display: block; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.04em; }
-  input, select {
-    width: 100%; padding: 7px 10px;
-    border: 1px solid var(--border); border-radius: var(--radius-sm);
-    background: var(--bg); color: var(--text); font-size: 13px;
-    margin-bottom: 10px; font-family: 'DM Sans', sans-serif;
-    transition: border-color 0.15s;
-  }
+  input, select { width: 100%; padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg); color: var(--text); font-size: 13px; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; transition: border-color 0.15s; }
   input:focus, select:focus { outline: none; border-color: var(--green-mid); background: #fff; }
-
   .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .form-group { margin-bottom: 0; }
-
-  /* EMPTY */
   .empty { text-align: center; padding: 24px; color: var(--text-hint); font-size: 12px; }
-
-  /* LOADING */
-  .loading-screen {
-    position: fixed; inset: 0;
-    background: var(--bg);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    z-index: 999;
-    gap: 12px;
-  }
-  .loading-screen .spinner {
-    width: 32px; height: 32px;
-    border: 2px solid var(--border);
-    border-top-color: var(--green-mid);
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
+  .loading-screen { position: fixed; inset: 0; background: var(--bg); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 999; gap: 12px; }
+  .spinner { width: 32px; height: 32px; border: 2px solid var(--border); border-top-color: var(--green-mid); border-radius: 50%; animation: spin 0.7s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .loading-screen p { font-size: 13px; color: var(--text-muted); }
-
-  /* CHART LEGEND */
-  .chart-legend { display: flex; gap: 14px; margin-bottom: 10px; flex-wrap: wrap; }
+  .chart-legend { display: flex; gap: 14px; margin-bottom: 10px; }
   .legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--text-muted); }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
-
-  @media (max-width: 768px) {
-    .metrics { grid-template-columns: repeat(2, 1fr); }
-    .grid2, .grid3 { grid-template-columns: 1fr; }
-    .grid3 .card:first-child { grid-column: 1; }
-  }
+  .avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--green-light); display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; color: var(--green-text); flex-shrink: 0; }
+  @media (max-width: 768px) { .metrics { grid-template-columns: repeat(2,1fr); } .grid2,.grid3 { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -299,22 +97,24 @@
 
 <div class="app">
   <div class="sidebar">
-    <div class="sb-logo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-    </div>
-    <div class="sb-ico active" onclick="showSec('painel',this)" id="sb-painel">
+    <div class="sb-logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+    <div class="sb-ico active" onclick="showSec('painel')" id="sb-painel">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
       <span class="sb-tooltip">Painel</span>
     </div>
-    <div class="sb-ico" onclick="showSec('planos',this)" id="sb-planos">
+    <div class="sb-ico" onclick="showSec('planos')" id="sb-planos">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12h6M9 16h6M17 21H7a2 2 0 01-2-2V5a2 2 0 012-2h7l5 5v11a2 2 0 01-2 2z"/></svg>
       <span class="sb-tooltip">Planos</span>
     </div>
-    <div class="sb-ico" onclick="showSec('animais',this)" id="sb-animais">
+    <div class="sb-ico" onclick="showSec('tutores')" id="sb-tutores">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+      <span class="sb-tooltip">Tutores</span>
+    </div>
+    <div class="sb-ico" onclick="showSec('animais')" id="sb-animais">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M6.343 6.343a8 8 0 1011.314 11.314A8 8 0 006.343 6.343z"/></svg>
       <span class="sb-tooltip">Animais</span>
     </div>
-    <div class="sb-ico" onclick="showSec('pagamentos',this)" id="sb-pagamentos">
+    <div class="sb-ico" onclick="showSec('pagamentos')" id="sb-pagamentos">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
       <span class="sb-tooltip">Pagamentos</span>
     </div>
@@ -324,6 +124,7 @@
     <div class="topbar">
       <button class="tab active" onclick="showSec('painel')">Painel</button>
       <button class="tab" onclick="showSec('planos')">Planos</button>
+      <button class="tab" onclick="showSec('tutores')">Tutores</button>
       <button class="tab" onclick="showSec('animais')">Animais</button>
       <button class="tab" onclick="showSec('pagamentos')">Pagamentos</button>
       <div class="topbar-right">
@@ -341,9 +142,7 @@
           <div class="card" style="grid-column:span 2">
             <div class="card-title">Pagamentos por plano</div>
             <div class="chart-legend" id="chart-legend"></div>
-            <div style="position:relative;height:155px">
-              <canvas id="chart-bar" role="img" aria-label="Pagamentos recebidos e pendentes por plano"></canvas>
-            </div>
+            <div style="position:relative;height:155px"><canvas id="chart-bar" role="img" aria-label="Pagamentos por plano"></canvas></div>
           </div>
           <div class="card-dark">
             <div class="card-title-light">Total recebido</div>
@@ -356,14 +155,8 @@
           </div>
         </div>
         <div class="grid2">
-          <div class="card">
-            <div class="card-title">Carências ativas</div>
-            <div id="lista-carencias"></div>
-          </div>
-          <div class="card">
-            <div class="card-title">Últimos pagamentos</div>
-            <div id="lista-ultimos"></div>
-          </div>
+          <div class="card"><div class="card-title">Carências ativas</div><div id="lista-carencias"></div></div>
+          <div class="card"><div class="card-title">Últimos pagamentos</div><div id="lista-ultimos"></div></div>
         </div>
       </div>
 
@@ -372,19 +165,37 @@
         <div class="grid2">
           <div class="card">
             <div class="card-title">Novo plano</div>
-            <label>Nome do plano</label>
-            <input id="p-nome" placeholder="Ex: PetCare Plus">
+            <label>Nome do plano</label><input id="p-nome" placeholder="Ex: PetCare Plus">
             <div class="form-row">
               <div class="form-group"><label>Telefone</label><input id="p-tel" placeholder="(11) 9xxxx-xxxx"></div>
               <div class="form-group"><label>E-mail</label><input id="p-email" placeholder="contato@plano.com"></div>
             </div>
-            <label>Espécies cobertas</label>
-            <input id="p-esp" placeholder="Ex: Cão, Gato, Ave">
+            <label>Espécies cobertas</label><input id="p-esp" placeholder="Ex: Cão, Gato, Ave">
             <button class="btn-primary" onclick="addPlano()">Adicionar plano</button>
           </div>
           <div class="card">
             <div class="card-title">Planos cadastrados (<span id="count-planos">0</span>)</div>
             <div id="lista-planos"><div class="empty">Nenhum plano cadastrado ainda.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TUTORES -->
+      <div class="section" id="sec-tutores">
+        <div class="grid2">
+          <div class="card">
+            <div class="card-title">Cadastrar tutor</div>
+            <label>Nome completo</label><input id="t-nome" placeholder="Ex: João Silva">
+            <div class="form-row">
+              <div class="form-group"><label>Telefone</label><input id="t-tel" placeholder="(11) 9xxxx-xxxx"></div>
+              <div class="form-group"><label>E-mail</label><input id="t-email" placeholder="joao@email.com"></div>
+            </div>
+            <label>CPF</label><input id="t-cpf" placeholder="000.000.000-00">
+            <button class="btn-primary" onclick="addTutor()">Cadastrar tutor</button>
+          </div>
+          <div class="card">
+            <div class="card-title">Tutores cadastrados (<span id="count-tutores">0</span>)</div>
+            <div id="lista-tutores"><div class="empty">Nenhum tutor cadastrado ainda.</div></div>
           </div>
         </div>
       </div>
@@ -396,22 +207,15 @@
             <div class="card-title">Cadastrar animal</div>
             <div class="form-row">
               <div class="form-group"><label>Nome do animal</label><input id="a-nome" placeholder="Ex: Thor"></div>
-              <div class="form-group"><label>Tutor</label><input id="a-tutor" placeholder="Nome do dono"></div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>Espécie</label>
-                <select id="a-esp">
-                  <option value="">Selecionar</option>
-                  <option>Cão</option><option>Gato</option><option>Ave</option><option>Réptil</option><option>Outro</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label>Plano</label>
-                <select id="a-plano"><option value="">Selecionar</option></select>
+              <div class="form-group"><label>Espécie</label>
+                <select id="a-esp"><option value="">Selecionar</option><option>Cão</option><option>Gato</option><option>Ave</option><option>Réptil</option><option>Outro</option></select>
               </div>
             </div>
-            <label>Data de adesão</label>
+            <label>Tutor responsável</label>
+            <select id="a-tutor"><option value="">Selecionar tutor</option></select>
+            <label>Plano contratado</label>
+            <select id="a-plano"><option value="">Selecionar plano</option></select>
+            <label>Data de adesão ao plano</label>
             <input type="date" id="a-adesao">
             <div class="form-row">
               <div class="form-group"><label>Serviço com carência</label><input id="a-serv" placeholder="Ex: Cirurgia ortopédica"></div>
@@ -431,17 +235,13 @@
         <div class="grid2">
           <div class="card">
             <div class="card-title">Registrar pagamento</div>
-            <label>Plano</label>
-            <select id="pg-plano"><option value="">Selecionar plano</option></select>
+            <label>Plano</label><select id="pg-plano"><option value="">Selecionar plano</option></select>
             <div class="form-row">
               <div class="form-group"><label>Valor (R$)</label><input type="number" id="pg-val" placeholder="0,00" min="0" step="0.01"></div>
               <div class="form-group"><label>Vencimento</label><input type="date" id="pg-venc"></div>
             </div>
             <label>Forma de pagamento</label>
-            <select id="pg-forma">
-              <option value="pix">PIX</option>
-              <option value="cartao">Cartão recorrente</option>
-            </select>
+            <select id="pg-forma"><option value="pix">PIX</option><option value="cartao">Cartão recorrente</option></select>
             <button class="btn-primary" onclick="addPgto()">Registrar pagamento</button>
           </div>
           <div class="card">
@@ -460,292 +260,183 @@ const SUPABASE_URL = 'https://uzmljpcqkdketixapfrf.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_J7QWyySajCMnkTUF-jhEaA_lqyLG8mw';
 const { createClient } = supabase;
 const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+let S = { planos:[], tutores:[], animais:[], pagamentos:[] };
+let barChart = null, currentSec = 'painel';
 
-let S = { planos: [], animais: [], pagamentos: [] };
-let barChart = null;
-let currentSec = 'painel';
+document.getElementById('date-label').textContent = new Date().toLocaleDateString('pt-BR',{weekday:'short',day:'2-digit',month:'short'});
 
-document.getElementById('date-label').textContent = new Date().toLocaleDateString('pt-BR', { weekday: 'short', day: '2-digit', month: 'short' });
+function setSyncPill(s){const p=document.getElementById('sync-pill');p.textContent=s==='saving'?'Salvando...':s==='error'?'Erro ao salvar':'Sincronizado';p.className='sync-pill'+(s==='saving'?' saving':s==='error'?' error':'');}
 
-function setSyncPill(state) {
-  const p = document.getElementById('sync-pill');
-  if (state === 'saving') { p.textContent = 'Salvando...'; p.className = 'sync-pill saving'; }
-  else if (state === 'ok') { p.textContent = 'Sincronizado'; p.className = 'sync-pill'; }
-  else if (state === 'error') { p.textContent = 'Erro ao salvar'; p.className = 'sync-pill error'; }
-}
-
-async function loadData() {
-  try {
-    const [{ data: planos }, { data: animais }, { data: pagamentos }] = await Promise.all([
+async function loadData(){
+  try{
+    const[{data:pl},{data:tu},{data:an},{data:pg}]=await Promise.all([
       db.from('planos').select('*').order('created_at'),
+      db.from('tutores').select('*').order('nome'),
       db.from('animais').select('*').order('created_at'),
       db.from('pagamentos').select('*').order('vencimento')
     ]);
-    S.planos = planos || [];
-    S.animais = animais || [];
-    S.pagamentos = pagamentos || [];
-  } catch (e) {
-    console.error(e);
-  }
-  document.getElementById('loading-screen').style.display = 'none';
+    S.planos=pl||[];S.tutores=tu||[];S.animais=an||[];S.pagamentos=pg||[];
+  }catch(e){console.error(e);}
+  document.getElementById('loading-screen').style.display='none';
   renderAll();
 }
 
-function renderAll() {
-  renderPlanos(); renderAnimais();
-  refillSelects();
-  if (currentSec === 'painel') renderPainel();
-  if (currentSec === 'pagamentos') renderPgtos();
+function renderAll(){renderPlanos();renderTutores();renderAnimais();refillSelects();if(currentSec==='painel')renderPainel();if(currentSec==='pagamentos')renderPgtos();}
+const today=()=>{const d=new Date();d.setHours(0,0,0,0);return d;};
+const initials=n=>{if(!n)return'?';const p=n.trim().split(' ');return p.length>=2?(p[0][0]+p[p.length-1][0]).toUpperCase():p[0][0].toUpperCase();};
+
+function showSec(id){
+  currentSec=id;
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.sb-ico').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(s=>s.classList.remove('active'));
+  document.getElementById('sec-'+id).classList.add('active');
+  document.getElementById('sb-'+id)?.classList.add('active');
+  ['painel','planos','tutores','animais','pagamentos'].forEach((s,i)=>{if(s===id)document.querySelectorAll('.tab')[i]?.classList.add('active');});
+  if(id==='painel')renderPainel();
+  if(id==='animais'||id==='pagamentos')refillSelects();
+  if(id==='pagamentos')renderPgtos();
 }
 
-const today = () => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; };
-
-function showSec(id, sbEl) {
-  currentSec = id;
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.sb-ico').forEach(s => s.classList.remove('active'));
-  document.querySelectorAll('.tab').forEach(s => s.classList.remove('active'));
-  document.getElementById('sec-' + id).classList.add('active');
-  document.getElementById('sb-' + id)?.classList.add('active');
-  const tabIdx = ['painel', 'planos', 'animais', 'pagamentos'].indexOf(id);
-  document.querySelectorAll('.tab')[tabIdx]?.classList.add('active');
-  if (sbEl) sbEl.classList.add('active');
-  if (id === 'painel') renderPainel();
-  if (id === 'pagamentos') { refillSelects(); renderPgtos(); }
-  if (id === 'animais') refillSelects();
-}
-
-function refillSelects() {
-  ['a-plano', 'pg-plano'].forEach(id => {
-    const s = document.getElementById(id);
-    const v = s.value;
-    s.innerHTML = '<option value="">Selecionar plano</option>';
-    S.planos.forEach(p => { const o = document.createElement('option'); o.value = p.id; o.textContent = p.nome; s.appendChild(o); });
-    s.value = v;
+function refillSelects(){
+  const st=document.getElementById('a-tutor');const vt=st.value;
+  st.innerHTML='<option value="">Selecionar tutor</option>';
+  S.tutores.forEach(t=>{const o=document.createElement('option');o.value=t.id;o.textContent=t.nome;st.appendChild(o);});
+  st.value=vt;
+  ['a-plano','pg-plano'].forEach(id=>{
+    const s=document.getElementById(id);const v=s.value;
+    s.innerHTML='<option value="">Selecionar plano</option>';
+    S.planos.forEach(p=>{const o=document.createElement('option');o.value=p.id;o.textContent=p.nome;s.appendChild(o);});
+    s.value=v;
   });
 }
 
-async function addPlano() {
-  const nome = document.getElementById('p-nome').value.trim();
-  if (!nome) return;
+async function addPlano(){
+  const nome=document.getElementById('p-nome').value.trim();if(!nome)return;
   setSyncPill('saving');
-  const { data, error } = await db.from('planos').insert({
-    nome,
-    telefone: document.getElementById('p-tel').value.trim(),
-    email: document.getElementById('p-email').value.trim(),
-    especies: document.getElementById('p-esp').value.trim()
-  }).select().single();
-  if (!error) {
-    S.planos.push(data);
-    setSyncPill('ok');
-    renderPlanos(); refillSelects(); renderPainel();
-    ['p-nome', 'p-tel', 'p-email', 'p-esp'].forEach(i => document.getElementById(i).value = '');
-  } else { setSyncPill('error'); }
+  const{data,error}=await db.from('planos').insert({nome,telefone:document.getElementById('p-tel').value.trim(),email:document.getElementById('p-email').value.trim(),especies:document.getElementById('p-esp').value.trim()}).select().single();
+  if(!error){S.planos.push(data);setSyncPill('ok');renderPlanos();refillSelects();renderPainel();['p-nome','p-tel','p-email','p-esp'].forEach(i=>document.getElementById(i).value='');}
+  else setSyncPill('error');
 }
 
-function renderPlanos() {
-  document.getElementById('count-planos').textContent = S.planos.length;
-  const el = document.getElementById('lista-planos');
-  if (!S.planos.length) { el.innerHTML = '<div class="empty">Nenhum plano cadastrado ainda.</div>'; return; }
-  el.innerHTML = S.planos.map(p => `
-    <div class="row">
-      <div>
-        <div class="row-name">${p.nome}</div>
-        <div class="row-sub">${p.telefone || '—'}${p.especies ? ' · ' + p.especies : ''}</div>
-      </div>
-      <button class="btn-sm btn-del" onclick="delPlano(${p.id})">Remover</button>
-    </div>`).join('');
+function renderPlanos(){
+  document.getElementById('count-planos').textContent=S.planos.length;
+  const el=document.getElementById('lista-planos');
+  if(!S.planos.length){el.innerHTML='<div class="empty">Nenhum plano cadastrado ainda.</div>';return;}
+  el.innerHTML=S.planos.map(p=>{const q=S.animais.filter(a=>a.plano_id===p.id).length;return`<div class="row"><div><div class="row-name">${p.nome}</div><div class="row-sub">${p.telefone||'—'}${p.especies?' · '+p.especies:''} · ${q} animal${q!==1?'is':''}</div></div><button class="btn-sm btn-del" onclick="delPlano(${p.id})">Remover</button></div>`;}).join('');
 }
 
-async function delPlano(id) {
-  if (!confirm('Remover este plano?')) return;
+async function delPlano(id){
+  if(!confirm('Remover este plano?'))return;setSyncPill('saving');
+  const{error}=await db.from('planos').delete().eq('id',id);
+  if(!error){S.planos=S.planos.filter(p=>p.id!==id);setSyncPill('ok');renderPlanos();refillSelects();renderPainel();}else setSyncPill('error');
+}
+
+async function addTutor(){
+  const nome=document.getElementById('t-nome').value.trim();if(!nome)return;
   setSyncPill('saving');
-  const { error } = await db.from('planos').delete().eq('id', id);
-  if (!error) {
-    S.planos = S.planos.filter(p => p.id !== id);
-    setSyncPill('ok');
-    renderPlanos(); refillSelects(); renderPainel();
-  } else { setSyncPill('error'); }
+  const{data,error}=await db.from('tutores').insert({nome,telefone:document.getElementById('t-tel').value.trim(),email:document.getElementById('t-email').value.trim(),cpf:document.getElementById('t-cpf').value.trim()}).select().single();
+  if(!error){S.tutores.push(data);setSyncPill('ok');renderTutores();refillSelects();renderPainel();['t-nome','t-tel','t-email','t-cpf'].forEach(i=>document.getElementById(i).value='');}
+  else setSyncPill('error');
 }
 
-async function addAnimal() {
-  const nome = document.getElementById('a-nome').value.trim();
-  if (!nome) return;
-  const pid = parseInt(document.getElementById('a-plano').value) || null;
-  const plano = S.planos.find(p => p.id === pid);
-  const adesao = document.getElementById('a-adesao').value || null;
-  const dias = parseInt(document.getElementById('a-dias').value) || 0;
-  let vencC = null;
-  if (adesao && dias > 0) { const d = new Date(adesao); d.setDate(d.getDate() + dias); vencC = d.toISOString().split('T')[0]; }
+function renderTutores(){
+  document.getElementById('count-tutores').textContent=S.tutores.length;
+  const el=document.getElementById('lista-tutores');
+  if(!S.tutores.length){el.innerHTML='<div class="empty">Nenhum tutor cadastrado ainda.</div>';return;}
+  el.innerHTML=S.tutores.map(t=>{const an=S.animais.filter(a=>a.tutor_id===t.id);return`<div class="row"><div style="display:flex;align-items:center;gap:10px"><div class="avatar">${initials(t.nome)}</div><div><div class="row-name">${t.nome}</div><div class="row-sub">${t.telefone||'—'} · ${an.length} animal${an.length!==1?'is':''}</div></div></div><button class="btn-sm btn-del" onclick="delTutor(${t.id})">Remover</button></div>`;}).join('');
+}
+
+async function delTutor(id){
+  if(!confirm('Remover este tutor?'))return;setSyncPill('saving');
+  const{error}=await db.from('tutores').delete().eq('id',id);
+  if(!error){S.tutores=S.tutores.filter(t=>t.id!==id);setSyncPill('ok');renderTutores();refillSelects();}else setSyncPill('error');
+}
+
+async function addAnimal(){
+  const nome=document.getElementById('a-nome').value.trim();if(!nome)return;
+  const pid=parseInt(document.getElementById('a-plano').value)||null;
+  const tid=parseInt(document.getElementById('a-tutor').value)||null;
+  const plano=S.planos.find(p=>p.id===pid);const tutor=S.tutores.find(t=>t.id===tid);
+  const adesao=document.getElementById('a-adesao').value||null;
+  const dias=parseInt(document.getElementById('a-dias').value)||0;
+  let vencC=null;if(adesao&&dias>0){const d=new Date(adesao);d.setDate(d.getDate()+dias);vencC=d.toISOString().split('T')[0];}
   setSyncPill('saving');
-  const { data, error } = await db.from('animais').insert({
-    nome,
-    tutor: document.getElementById('a-tutor').value.trim(),
-    especie: document.getElementById('a-esp').value,
-    plano_id: pid,
-    plano_nome: plano ? plano.nome : '',
-    adesao,
-    servico: document.getElementById('a-serv').value.trim(),
-    dias_carencia: dias,
-    venc_carencia: vencC
-  }).select().single();
-  if (!error) {
-    S.animais.push(data);
-    setSyncPill('ok');
-    renderAnimais(); renderPainel();
-    ['a-nome', 'a-tutor', 'a-adesao', 'a-serv', 'a-dias'].forEach(i => document.getElementById(i).value = '');
-    document.getElementById('a-esp').value = ''; document.getElementById('a-plano').value = '';
-  } else { setSyncPill('error'); }
+  const{data,error}=await db.from('animais').insert({nome,especie:document.getElementById('a-esp').value,tutor_id:tid,tutor_nome:tutor?tutor.nome:'',plano_id:pid,plano_nome:plano?plano.nome:'',adesao,servico:document.getElementById('a-serv').value.trim(),dias_carencia:dias,venc_carencia:vencC}).select().single();
+  if(!error){S.animais.push(data);setSyncPill('ok');renderAnimais();renderTutores();renderPainel();['a-nome','a-adesao','a-serv','a-dias'].forEach(i=>document.getElementById(i).value='');document.getElementById('a-esp').value='';document.getElementById('a-tutor').value='';document.getElementById('a-plano').value='';}
+  else setSyncPill('error');
 }
 
-function renderAnimais() {
-  document.getElementById('count-animais').textContent = S.animais.length;
-  const el = document.getElementById('lista-animais');
-  if (!S.animais.length) { el.innerHTML = '<div class="empty">Nenhum animal cadastrado ainda.</div>'; return; }
-  const td = today();
-  el.innerHTML = S.animais.map(a => {
-    let badge = '';
-    if (a.venc_carencia) { const vc = new Date(a.venc_carencia); const diff = Math.ceil((vc - td) / 86400000); badge = diff > 0 ? `<span class="badge bb">${diff}d carência</span>` : `<span class="badge bg">Livre</span>`; }
-    return `<div class="row">
-      <div>
-        <div class="row-name">${a.nome} <span style="font-weight:400;color:var(--text-hint);font-size:11px">${a.especie || ''}</span></div>
-        <div class="row-sub">${a.tutor || '—'} · ${a.plano_nome || '—'}</div>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center">${badge}<button class="btn-sm btn-del" onclick="delAnimal(${a.id})">✕</button></div>
-    </div>`;
-  }).join('');
+function renderAnimais(){
+  document.getElementById('count-animais').textContent=S.animais.length;
+  const el=document.getElementById('lista-animais');
+  if(!S.animais.length){el.innerHTML='<div class="empty">Nenhum animal cadastrado ainda.</div>';return;}
+  const td=today();
+  el.innerHTML=S.animais.map(a=>{let badge='';if(a.venc_carencia){const vc=new Date(a.venc_carencia);const diff=Math.ceil((vc-td)/86400000);badge=diff>0?`<span class="badge bb">${diff}d carência</span>`:`<span class="badge bg">Livre</span>`;}return`<div class="row"><div><div class="row-name">${a.nome} <span style="font-weight:400;color:var(--text-hint);font-size:11px">${a.especie||''}</span></div><div class="row-sub">Tutor: ${a.tutor_nome||'—'} · Plano: ${a.plano_nome||'—'}</div></div><div style="display:flex;gap:6px;align-items:center">${badge}<button class="btn-sm btn-del" onclick="delAnimal(${a.id})">✕</button></div></div>`;}).join('');
 }
 
-async function delAnimal(id) {
-  if (!confirm('Remover este animal?')) return;
+async function delAnimal(id){
+  if(!confirm('Remover este animal?'))return;setSyncPill('saving');
+  const{error}=await db.from('animais').delete().eq('id',id);
+  if(!error){S.animais=S.animais.filter(a=>a.id!==id);setSyncPill('ok');renderAnimais();renderTutores();renderPainel();}else setSyncPill('error');
+}
+
+async function addPgto(){
+  const pid=parseInt(document.getElementById('pg-plano').value);const plano=S.planos.find(p=>p.id===pid);if(!plano)return;
+  const val=parseFloat(document.getElementById('pg-val').value);const venc=document.getElementById('pg-venc').value;if(!val||!venc)return;
   setSyncPill('saving');
-  const { error } = await db.from('animais').delete().eq('id', id);
-  if (!error) {
-    S.animais = S.animais.filter(a => a.id !== id);
-    setSyncPill('ok');
-    renderAnimais(); renderPainel();
-  } else { setSyncPill('error'); }
+  const{data,error}=await db.from('pagamentos').insert({plano_id:pid,plano_nome:plano.nome,valor:val,vencimento:venc,forma:document.getElementById('pg-forma').value,status:'pendente'}).select().single();
+  if(!error){S.pagamentos.push(data);setSyncPill('ok');renderPgtos();renderPainel();document.getElementById('pg-val').value='';document.getElementById('pg-venc').value='';}
+  else setSyncPill('error');
 }
 
-async function addPgto() {
-  const pid = parseInt(document.getElementById('pg-plano').value);
-  const plano = S.planos.find(p => p.id === pid);
-  if (!plano) return;
-  const val = parseFloat(document.getElementById('pg-val').value);
-  const venc = document.getElementById('pg-venc').value;
-  if (!val || !venc) return;
+async function marcarPago(id){
   setSyncPill('saving');
-  const { data, error } = await db.from('pagamentos').insert({
-    plano_id: pid,
-    plano_nome: plano.nome,
-    valor: val,
-    vencimento: venc,
-    forma: document.getElementById('pg-forma').value,
-    status: 'pendente'
-  }).select().single();
-  if (!error) {
-    S.pagamentos.push(data);
-    setSyncPill('ok');
-    renderPgtos(); renderPainel();
-    document.getElementById('pg-val').value = ''; document.getElementById('pg-venc').value = '';
-  } else { setSyncPill('error'); }
+  const{error}=await db.from('pagamentos').update({status:'pago'}).eq('id',id);
+  if(!error){const p=S.pagamentos.find(x=>x.id===id);if(p)p.status='pago';setSyncPill('ok');renderPgtos();renderPainel();}else setSyncPill('error');
 }
 
-async function marcarPago(id) {
-  setSyncPill('saving');
-  const { error } = await db.from('pagamentos').update({ status: 'pago' }).eq('id', id);
-  if (!error) {
-    const p = S.pagamentos.find(x => x.id === id);
-    if (p) p.status = 'pago';
-    setSyncPill('ok');
-    renderPgtos(); renderPainel();
-  } else { setSyncPill('error'); }
+function renderPgtos(){
+  const el=document.getElementById('lista-pgtos');
+  if(!S.pagamentos.length){el.innerHTML='<div class="empty">Nenhum pagamento registrado ainda.</div>';return;}
+  const td=today();
+  el.innerHTML=[...S.pagamentos].sort((a,b)=>new Date(a.vencimento)-new Date(b.vencimento)).map(p=>{const vd=new Date(p.vencimento+'T00:00:00');const atrasado=p.status==='pendente'&&vd<td;const badge=p.status==='pago'?'<span class="badge bg">Pago</span>':atrasado?'<span class="badge br">Atrasado</span>':'<span class="badge ba">Pendente</span>';return`<div class="row"><div><div class="row-name">${p.plano_nome}</div><div class="row-sub">R$ ${parseFloat(p.valor).toFixed(2)} · ${p.forma==='pix'?'PIX':'Cartão'} · ${vd.toLocaleDateString('pt-BR')}</div></div><div style="display:flex;gap:6px;align-items:center">${badge}${p.status!=='pago'?`<button class="btn-sm btn-confirm" onclick="marcarPago(${p.id})">✓ Pago</button>`:''}</div></div>`;}).join('');
 }
 
-function renderPgtos() {
-  const el = document.getElementById('lista-pgtos');
-  if (!S.pagamentos.length) { el.innerHTML = '<div class="empty">Nenhum pagamento registrado ainda.</div>'; return; }
-  const td = today();
-  el.innerHTML = [...S.pagamentos].sort((a, b) => new Date(a.vencimento) - new Date(b.vencimento)).map(p => {
-    const vd = new Date(p.vencimento + 'T00:00:00');
-    const atrasado = p.status === 'pendente' && vd < td;
-    const badge = p.status === 'pago' ? '<span class="badge bg">Pago</span>' : atrasado ? '<span class="badge br">Atrasado</span>' : '<span class="badge ba">Pendente</span>';
-    return `<div class="row">
-      <div>
-        <div class="row-name">${p.plano_nome}</div>
-        <div class="row-sub">R$ ${parseFloat(p.valor).toFixed(2)} · ${p.forma === 'pix' ? 'PIX' : 'Cartão'} · ${vd.toLocaleDateString('pt-BR')}</div>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center">${badge}${p.status !== 'pago' ? `<button class="btn-sm btn-confirm" onclick="marcarPago(${p.id})">✓ Pago</button>` : ''}</div>
-    </div>`;
-  }).join('');
-}
+function renderPainel(){
+  const td=today();
+  const pend=S.pagamentos.filter(p=>p.status==='pendente');
+  const pagos=S.pagamentos.filter(p=>p.status==='pago');
+  const atrasados=pend.filter(p=>new Date(p.vencimento+'T00:00:00')<td);
+  const totalPago=pagos.reduce((s,p)=>s+parseFloat(p.valor),0);
+  const totalPend=pend.reduce((s,p)=>s+parseFloat(p.valor),0);
+  const carenciasAtivas=S.animais.filter(a=>a.venc_carencia&&new Date(a.venc_carencia)>=td);
 
-function renderPainel() {
-  const td = today();
-  const pend = S.pagamentos.filter(p => p.status === 'pendente');
-  const pagos = S.pagamentos.filter(p => p.status === 'pago');
-  const atrasados = pend.filter(p => new Date(p.vencimento + 'T00:00:00') < td);
-  const totalPago = pagos.reduce((s, p) => s + parseFloat(p.valor), 0);
-  const totalPend = pend.reduce((s, p) => s + parseFloat(p.valor), 0);
-  const carenciasAtivas = S.animais.filter(a => a.venc_carencia && new Date(a.venc_carencia) >= td);
-
-  document.getElementById('metrics-row').innerHTML = `
-    <div class="metric"><div class="metric-lbl">Planos ativos</div><div class="metric-val">${S.planos.length}</div><div class="metric-sub">cadastrados</div></div>
+  document.getElementById('metrics-row').innerHTML=`
+    <div class="metric"><div class="metric-lbl">Planos ativos</div><div class="metric-val">${S.planos.length}</div><div class="metric-sub">${S.tutores.length} tutores</div></div>
     <div class="metric"><div class="metric-lbl">Animais cobertos</div><div class="metric-val">${S.animais.length}</div><div class="metric-sub">${carenciasAtivas.length} com carência ativa</div></div>
-    <div class="metric"><div class="metric-lbl">Total recebido</div><div class="metric-val green">R$ ${totalPago.toFixed(0)}</div><div class="metric-sub">${pagos.length} pagamento${pagos.length !== 1 ? 's' : ''}</div></div>
-    <div class="metric"><div class="metric-lbl">Em aberto</div><div class="metric-val ${atrasados.length ? 'red' : 'amber'}">R$ ${totalPend.toFixed(0)}</div><div class="metric-sub">${atrasados.length} atrasado${atrasados.length !== 1 ? 's' : ''}</div></div>`;
+    <div class="metric"><div class="metric-lbl">Total recebido</div><div class="metric-val green">R$ ${totalPago.toFixed(0)}</div><div class="metric-sub">${pagos.length} pagamento${pagos.length!==1?'s':''}</div></div>
+    <div class="metric"><div class="metric-lbl">Em aberto</div><div class="metric-val ${atrasados.length?'red':'amber'}">R$ ${totalPend.toFixed(0)}</div><div class="metric-sub">${atrasados.length} atrasado${atrasados.length!==1?'s':''}</div></div>`;
 
-  document.getElementById('total-recebido').textContent = 'R$ ' + totalPago.toFixed(2);
-  document.getElementById('total-sub').textContent = pagos.length + ' pagamento' + (pagos.length !== 1 ? 's' : '') + ' confirmado' + (pagos.length !== 1 ? 's' : '');
-  document.getElementById('status-pills').innerHTML =
-    `<span class="badge bg">${pagos.length} pago${pagos.length !== 1 ? 's' : ''}</span>` +
-    `<span class="badge ba">${pend.length - atrasados.length} pendente${(pend.length - atrasados.length) !== 1 ? 's' : ''}</span>` +
-    (atrasados.length ? `<span class="badge br">${atrasados.length} atrasado${atrasados.length !== 1 ? 's' : ''}</span>` : '');
+  document.getElementById('total-recebido').textContent='R$ '+totalPago.toFixed(2);
+  document.getElementById('total-sub').textContent=pagos.length+' pagamento'+(pagos.length!==1?'s':'')+' confirmado'+(pagos.length!==1?'s':'');
+  document.getElementById('status-pills').innerHTML=`<span class="badge bg">${pagos.length} pago${pagos.length!==1?'s':''}</span><span class="badge ba">${pend.length-atrasados.length} pendente${(pend.length-atrasados.length)!==1?'s':''}</span>`+(atrasados.length?`<span class="badge br">${atrasados.length} atrasado${atrasados.length!==1?'s':''}</span>`:'');
 
-  const lc = document.getElementById('lista-carencias');
-  if (!carenciasAtivas.length) { lc.innerHTML = '<div class="empty">Nenhuma carência ativa.</div>'; }
-  else lc.innerHTML = carenciasAtivas.slice(0, 5).map(a => {
-    const vc = new Date(a.venc_carencia); const diff = Math.ceil((vc - td) / 86400000);
-    return `<div class="row"><div><div class="row-name">${a.nome}</div><div class="row-sub">${a.servico || '—'} · ${a.plano_nome || '—'}</div></div><span class="badge bb">${diff}d</span></div>`;
-  }).join('');
+  const lc=document.getElementById('lista-carencias');
+  if(!carenciasAtivas.length){lc.innerHTML='<div class="empty">Nenhuma carência ativa.</div>';}
+  else lc.innerHTML=carenciasAtivas.slice(0,5).map(a=>{const vc=new Date(a.venc_carencia);const diff=Math.ceil((vc-td)/86400000);return`<div class="row"><div><div class="row-name">${a.nome}</div><div class="row-sub">${a.servico||'—'} · ${a.tutor_nome||a.plano_nome||'—'}</div></div><span class="badge bb">${diff}d</span></div>`;}).join('');
 
-  const lu = document.getElementById('lista-ultimos');
-  const recentes = [...S.pagamentos].sort((a, b) => b.id - a.id).slice(0, 5);
-  if (!recentes.length) { lu.innerHTML = '<div class="empty">Nenhum pagamento ainda.</div>'; }
-  else lu.innerHTML = recentes.map(p => {
-    const badge = p.status === 'pago' ? '<span class="badge bg">Pago</span>' : new Date(p.vencimento + 'T00:00:00') < td ? '<span class="badge br">Atrasado</span>' : '<span class="badge ba">Pendente</span>';
-    return `<div class="row"><div><div class="row-name">${p.plano_nome}</div><div class="row-sub">R$ ${parseFloat(p.valor).toFixed(2)} · ${p.forma === 'pix' ? 'PIX' : 'Cartão'}</div></div>${badge}</div>`;
-  }).join('');
+  const lu=document.getElementById('lista-ultimos');
+  const recentes=[...S.pagamentos].sort((a,b)=>b.id-a.id).slice(0,5);
+  if(!recentes.length){lu.innerHTML='<div class="empty">Nenhum pagamento ainda.</div>';}
+  else lu.innerHTML=recentes.map(p=>{const badge=p.status==='pago'?'<span class="badge bg">Pago</span>':new Date(p.vencimento+'T00:00:00')<td?'<span class="badge br">Atrasado</span>':'<span class="badge ba">Pendente</span>';return`<div class="row"><div><div class="row-name">${p.plano_nome}</div><div class="row-sub">R$ ${parseFloat(p.valor).toFixed(2)} · ${p.forma==='pix'?'PIX':'Cartão'}</div></div>${badge}</div>`;}).join('');
 
-  document.getElementById('chart-legend').innerHTML = `
-    <span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Recebido</span>
-    <span class="legend-item"><span class="legend-dot" style="background:#EF9F27"></span>Pendente</span>`;
-
-  const labels = S.planos.map(p => p.nome);
-  const vals = S.planos.map(p => S.pagamentos.filter(x => x.plano_id === p.id && x.status === 'pago').reduce((s, x) => s + parseFloat(x.valor), 0));
-  const pends = S.planos.map(p => S.pagamentos.filter(x => x.plano_id === p.id && x.status === 'pendente').reduce((s, x) => s + parseFloat(x.valor), 0));
-
-  if (barChart) barChart.destroy();
-  if (S.planos.length) {
-    barChart = new Chart(document.getElementById('chart-bar'), {
-      type: 'bar',
-      data: {
-        labels,
-        datasets: [
-          { label: 'Recebido', data: vals, backgroundColor: '#1D9E75', borderRadius: 4 },
-          { label: 'Pendente', data: pends, backgroundColor: '#EF9F27', borderRadius: 4 }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          x: { grid: { display: false }, ticks: { font: { size: 11, family: 'DM Sans' }, color: '#6b736b' } },
-          y: { grid: { color: '#f0f2f0' }, ticks: { font: { size: 11, family: 'DM Sans' }, color: '#6b736b', callback: v => 'R$' + v } }
-        }
-      }
-    });
-  }
+  document.getElementById('chart-legend').innerHTML=`<span class="legend-item"><span class="legend-dot" style="background:#1D9E75"></span>Recebido</span><span class="legend-item"><span class="legend-dot" style="background:#EF9F27"></span>Pendente</span>`;
+  const labels=S.planos.map(p=>p.nome);
+  const vals=S.planos.map(p=>S.pagamentos.filter(x=>x.plano_id===p.id&&x.status==='pago').reduce((s,x)=>s+parseFloat(x.valor),0));
+  const pends=S.planos.map(p=>S.pagamentos.filter(x=>x.plano_id===p.id&&x.status==='pendente').reduce((s,x)=>s+parseFloat(x.valor),0));
+  if(barChart)barChart.destroy();
+  if(S.planos.length){barChart=new Chart(document.getElementById('chart-bar'),{type:'bar',data:{labels,datasets:[{label:'Recebido',data:vals,backgroundColor:'#1D9E75',borderRadius:4},{label:'Pendente',data:pends,backgroundColor:'#EF9F27',borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false},ticks:{font:{size:11,family:'DM Sans'},color:'#6b736b'}},y:{grid:{color:'#f0f2f0'},ticks:{font:{size:11,family:'DM Sans'},color:'#6b736b',callback:v=>'R$'+v}}}}});}
 }
 
 loadData();
