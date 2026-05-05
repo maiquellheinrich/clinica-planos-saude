@@ -770,14 +770,13 @@ async function gerarCobranças(){
   const jaGeradosIds=new Set(S.pagamentos.filter(p=>p.mes_referencia===mes).map(p=>p.contrato_id));
   const paraGerar=contratos.filter(c=>!jaGeradosIds.has(c.id));
   if(!paraGerar.length){alert('Todos os contratos ativos já têm cobrança gerada para '+mesAtualLabel()+'.');return;}
-  const nomes=paraGerar.map(c=>c.tutor_nome||c.plano_nome).join(', ');
-  if(!confirm(`Gerar ${paraGerar.length} cobrança${paraGerar.length!==1?'s':''} para ${mesAtualLabel()}?
-
-${nomes}`))return;
+  const resumo=paraGerar.map(c=>'• '+( c.tutor_nome||c.plano_nome)+' — R$ '+getValorContrato(c).toFixed(2)).join('\n');
+  if(!confirm('Gerar '+paraGerar.length+' cobrança'+(paraGerar.length!==1?'s':'')+' para '+mesAtualLabel()+'?\n\n'+resumo))return;
+  setSyncPill('saving');
   const ano=new Date().getFullYear();const m=new Date().getMonth()+1;
   const inserts=paraGerar.map(c=>{
     const dia=Math.min(c.dia_vencimento,28);
-    const venc=`${ano}-${String(m).padStart(2,'0')}-${String(dia).padStart(2,'0')}`;
+    const venc=ano+'-'+String(m).padStart(2,'0')+'-'+String(dia).padStart(2,'0');
     const valor=getValorContrato(c);
     return{contrato_id:c.id,plano_id:null,plano_nome:c.plano_nome,tutor_nome:c.tutor_nome,valor,vencimento:venc,forma:c.forma_pagamento||'pix',status:'pendente',mes_referencia:mes};
   });
