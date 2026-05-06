@@ -170,6 +170,23 @@
   </div>
 </div>
 
+<!-- MODAL CANCELAR CONTRATO -->
+<div class="modal-overlay" id="modal-cancelar">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Cancelar contrato</span><button class="modal-close" onclick="closeModal('modal-cancelar')">x</button></div>
+    <input type="hidden" id="cancel-contrato-id">
+    <div style="background:var(--red-light);border:1px solid #fcc;border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:12px;color:var(--red-text)" id="cancel-contrato-info"></div>
+    <label>Data de cancelamento</label><input type="date" id="cancel-data">
+    <label>Motivo do cancelamento</label>
+    <input id="cancel-motivo" placeholder="Ex: inadimplencia, solicitacao do tutor...">
+    <div style="font-size:11px;color:var(--text-hint);margin-bottom:12px;">As cobranças pendentes deste contrato serao removidas automaticamente.</div>
+    <div class="modal-footer" style="justify-content:space-between">
+      <button class="btn-sm btn-del" onclick="confirmarCancelamento()">Confirmar cancelamento</button>
+      <button class="btn-sm" onclick="closeModal('modal-cancelar')">Voltar</button>
+    </div>
+  </div>
+</div>
+
 <!-- MODAL EDITAR CONTRATO -->
 <div class="modal-overlay" id="modal-contrato">
   <div class="modal">
@@ -366,6 +383,13 @@
           <div class="card">
             <div class="card-title">Contratos ativos (<span id="count-contratos">0</span>)</div>
             <div id="lista-contratos"><div class="empty">Nenhum contrato ainda.</div></div>
+            <div id="secao-cancelados" style="display:none;margin-top:16px">
+              <div style="display:flex;align-items:center;justify-content:space-between;cursor:pointer;margin-bottom:8px" onclick="toggleCancelados()">
+                <div style="font-size:12px;font-weight:500;color:var(--text-muted);text-transform:uppercase;letter-spacing:.04em">Cancelados (<span id="count-cancelados">0</span>)</div>
+                <span style="font-size:11px;color:var(--text-hint)" id="toggle-cancelados-label">Mostrar</span>
+              </div>
+              <div id="lista-cancelados" style="display:none"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -607,12 +631,51 @@ async function addContrato(){
   else setSyncPill('error');
 }
 
+function abrirCancelamento(id){
+  const c=S.contratos.find(x=>x.id===id);if(!c)return;
+  document.getElementById('cancel-contrato-id').value=c.id;
+  document.getElementById('cancel-contrato-info').textContent=(c.tutor_nome||'Contrato')+' - '+(c.plano_nome||'');
+  document.getElementById('cancel-data').value=new Date().toISOString().split('T')[0];
+  document.getElementById('cancel-motivo').value='';
+  openModal('modal-cancelar');
+}
+
+async function confirmarCancelamento(){
+  const id=parseInt(document.getElementById('cancel-contrato-id').value);
+  const data=document.getElementById('cancel-data').value;
+  const motivo=document.getElementById('cancel-motivo').value.trim();
+  if(!data)return alert('Informe a data de cancelamento.');
+  setSyncPill('saving');
+  // Inativa o contrato
+  const{error}=await db.from('contratos').update({ativo:false,cancelado_em:data,motivo_cancelamento:motivo||null}).eq('id',id);
+  if(error){setSyncPill('error');return;}
+  // Remove cobranças pendentes do contrato
+  const pendentes=S.pagamentos.filter(p=>p.contrato_id===id&&p.status==='pendente');
+  if(pendentes.length){
+    await db.from('pagamentos').delete().eq('contrato_id',id).eq('status','pendente');
+    S.pagamentos=S.pagamentos.filter(p=>!(p.contrato_id===id&&p.status==='pendente'));
+  }
+  const c=S.contratos.find(x=>x.id===id);
+  if(c){c.ativo=false;c.cancelado_em=data;c.motivo_cancelamento=motivo||null;}
+  setSyncPill('ok');
+  closeModal('modal-cancelar');
+  renderContratos();renderTutores();renderPainel();
+}
+
+function toggleCancelados(){
+  const lista=document.getElementById('lista-cancelados');
+  const label=document.getElementById('toggle-cancelados-label');
+  if(lista.style.display==='none'){lista.style.display='block';label.textContent='Ocultar';}
+  else{lista.style.display='none';label.textContent='Mostrar';}
+}
+
 function renderContratos(){
-  document.getElementById('count-contratos').textContent=S.contratos.filter(c=>c.ativo).length;
-  const el=document.getElementById('lista-contratos');
   const ativos=S.contratos.filter(c=>c.ativo);
-  if(!ativos.length){el.innerHTML='<div class="empty">Nenhum contrato ainda.</div>';return;}
-  el.innerHTML=ativos.map(c=>{
+  const cancelados=S.contratos.filter(c=>!c.ativo);
+  document.getElementById('count-contratos').textContent=ativos.length;
+  const el=document.getElementById('lista-contratos');
+  if(!ativos.length){el.innerHTML='<div class="empty">Nenhum contrato ativo.</div>';}
+  else el.innerHTML=ativos.map(c=>{
     const tutor=S.tutores.find(t=>t.id===c.tutor_id);
     const pets=S.animais.filter(a=>a.contrato_id===c.id);
     const valor=getValorContrato(c);
@@ -621,16 +684,36 @@ function renderContratos(){
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px">
         <div>
           <div style="font-weight:500;font-size:13px">${tutor?tutor.nome:c.tutor_nome} ${tipoTag}</div>
-          <div class="row-sub">R$ ${valor.toFixed(2)}/mês · vence dia ${c.dia_vencimento||'—'} · ${c.forma_pagamento==='pix'?'PIX':'Cartão'}</div>
-          <div class="row-sub">${pets.length} pet${pets.length!==1?'s':''}: ${pets.map(a=>a.nome).join(', ')||'—'}</div>
+          <div class="row-sub">R$ ${valor.toFixed(2)}/mes · vence dia ${c.dia_vencimento||'--'} · ${c.forma_pagamento==='pix'?'PIX':'Cartao'}</div>
+          <div class="row-sub">${pets.length} pet${pets.length!==1?'s':''}: ${pets.map(a=>a.nome).join(', ')||'--'}</div>
         </div>
         <div style="display:flex;gap:6px;flex-shrink:0">
           <button class="btn-sm btn-edit" onclick="editContrato(${c.id})">Editar</button>
+          <button class="btn-sm" style="border-color:#fcc;color:var(--red)" onclick="abrirCancelamento(${c.id})">Cancelar plano</button>
           <button class="btn-sm btn-del" onclick="delContrato(${c.id})">Remover</button>
         </div>
       </div>
     </div>`;
   }).join('');
+
+  // Secao cancelados
+  const secao=document.getElementById('secao-cancelados');
+  const listaCancelados=document.getElementById('lista-cancelados');
+  document.getElementById('count-cancelados').textContent=cancelados.length;
+  if(cancelados.length){
+    secao.style.display='block';
+    listaCancelados.innerHTML=cancelados.map(c=>{
+      const tutor=S.tutores.find(t=>t.id===c.tutor_id);
+      const tipoTag=c.plano_tipo==='essencial'?`<span class="plano-tipo-essencial">Essencial</span>`:`<span class="plano-tipo-protegido">Protegido</span>`;
+      const dataCanc=c.cancelado_em?new Date(c.cancelado_em+'T00:00:00').toLocaleDateString('pt-BR'):'--';
+      return`<div class="contrato-card" style="opacity:.7;border-color:#fcc">
+        <div style="font-weight:500;font-size:13px;color:var(--text-muted)">${tutor?tutor.nome:c.tutor_nome} ${tipoTag} <span class="badge br">Cancelado</span></div>
+        <div class="row-sub">Cancelado em ${dataCanc}${c.motivo_cancelamento?' · '+c.motivo_cancelamento:''}</div>
+      </div>`;
+    }).join('');
+  } else {
+    secao.style.display='none';
+  }
 }
 
 function editContrato(id){
